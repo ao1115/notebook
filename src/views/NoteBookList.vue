@@ -1,5 +1,5 @@
 <template>
-  <div>小计</div>
+  <div>主页</div>
 </template>
 
 

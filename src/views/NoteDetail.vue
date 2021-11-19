@@ -1,5 +1,5 @@
 <template>
-  <div>工作台</div>
+  <div>小计</div>
 </template>
 
 

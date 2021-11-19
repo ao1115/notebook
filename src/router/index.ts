@@ -7,8 +7,12 @@ import TashDetail from '@/views/TashDetail.vue'
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
-  {
+  {//默认路径，进来就自动跳转到money界面
     path: '/',
+    redirect: '/login'
+  },
+  {
+    path: '/login',
     name: 'Login',
     component: Login
   },

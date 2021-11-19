@@ -94,9 +94,16 @@ export default {
       Auth.register({
         username: this.register.username,
         password: this.register.password,
-      }).then((data) => {
-        console.log(data);
-      });
+      })
+        .then((data) => {
+          this.register.isError = false;
+          this.register.notice = "";
+          this.$router.push({ path: "notebooks" });
+        })
+        .catch((data) => {
+          this.register.isError = true;
+          this.register.notice = data.msg;
+        });
 
       console.log(
         `start register..., username: ${this.register.username} , password: ${this.register.password}`
@@ -120,9 +127,16 @@ export default {
       Auth.login({
         username: this.login.username,
         password: this.login.password,
-      }).then((data) => {
-        console.log(data);
-      });
+      })
+        .then((data) => {
+          this.login.isError = false;
+          this.login.notice = "";
+          this.$router.push({ path: "notebooks" });
+        })
+        .catch((data) => {
+          this.login.isError = true;
+          this.login.notice = data.msg;
+        });
       console.log(
         `start login..., username: ${this.login.username} , password: ${this.login.password}`
       );

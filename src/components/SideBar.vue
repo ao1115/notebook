@@ -2,16 +2,16 @@
   <div class="side-bar">
     <div class="icons">
       <router-link
-        to="/note/1"
-        title="笔记"
+        to="/notebooks"
+        title="工作台"
         class="item"
         active-class="selected"
       >
         <Icon name="gongzuotai" />工作台</router-link
       >
       <router-link
-        to="/notebooks"
-        title="笔记本"
+        to="/note/1"
+        title="小计"
         class="item"
         active-class="selected"
       >
