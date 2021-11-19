@@ -17,13 +17,13 @@
 
 <script>
 import Avatar from "@/components/Avatar.vue";
-import request from "@/helpers/request";
+import Auth from "@/apis/auth";
 export default {
   components: { Avatar },
   methods: {
     logout() {
       console.log("logout");
-      request("/auth/logout", "get").then((data) => {
+      Auth.logout().then((data) => {
         console.log(data);
       });
     },

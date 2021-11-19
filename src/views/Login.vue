@@ -43,9 +43,9 @@
 </template>
 
    <script>
-import request from "@/helpers/request";
+import Auth from "@/apis/auth";
 //在开始的时候获取登录状态
-request("/auth", "get").then((data) => {
+Auth.getInfo().then((data) => {
   console.log(data);
 });
 export default {
@@ -91,7 +91,7 @@ export default {
       }
       this.register.isError = false;
       this.register.notice = "";
-      request("/auth/register", "POST", {
+      Auth.register({
         username: this.register.username,
         password: this.register.password,
       }).then((data) => {
@@ -117,7 +117,7 @@ export default {
       this.login.isError = false;
       this.login.notice = "";
 
-      request("/auth/login", "POST", {
+      Auth.login({
         username: this.login.username,
         password: this.login.password,
       }).then((data) => {
