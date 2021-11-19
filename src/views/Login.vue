@@ -43,6 +43,11 @@
 </template>
 
    <script>
+import request from "@/helpers/request";
+//在开始的时候获取登录状态
+request("/auth", "get").then((data) => {
+  console.log(data);
+});
 export default {
   data() {
     return {
@@ -58,7 +63,7 @@ export default {
         username: "",
         password: "",
         notice:
-          "用户名4~16个字符，仅限于字母、数字、下划线、中文；密码长度为6~16个字符",
+          "用户名1~15个字符，仅限于字母、数字、下划线、中文；密码长度为6~16个字符",
         isError: false,
       },
     };
@@ -72,10 +77,11 @@ export default {
       this.isShowLogin = false;
       this.isShowRegister = true;
     },
+    //注册框
     onRegister() {
-      if (!/^[\w\u4e00-\u9fa5]{4,16}$/.test(this.register.username)) {
+      if (!/^[\w\u4e00-\u9fa5]{1,15}$/.test(this.register.username)) {
         this.register.isError = true;
-        this.register.notice = "用户名3~15个字符，仅限于字母数字下划线中文";
+        this.register.notice = "用户名1~15个字符，仅限于字母数字下划线中文";
         return;
       }
       if (!/^.{6,16}$/.test(this.register.password)) {
@@ -85,15 +91,22 @@ export default {
       }
       this.register.isError = false;
       this.register.notice = "";
-      console.log(this.register.username);
+      request("/auth/register", "POST", {
+        username: this.register.username,
+        password: this.register.password,
+      }).then((data) => {
+        console.log(data);
+      });
+
       console.log(
         `start register..., username: ${this.register.username} , password: ${this.register.password}`
       );
     },
+    //登录框
     onLogin() {
-      if (!/^[\w\u4e00-\u9fa5]{3,15}$/.test(this.login.username)) {
+      if (!/^[\w\u4e00-\u9fa5]{1,15}$/.test(this.login.username)) {
         this.login.isError = true;
-        this.login.notice = "用户名3~15个字符，仅限于字母数字下划线中文";
+        this.login.notice = "用户名1~15个字符，仅限于字母数字下划线中文";
         return;
       }
       if (!/^.{6,16}$/.test(this.login.password)) {
@@ -103,6 +116,13 @@ export default {
       }
       this.login.isError = false;
       this.login.notice = "";
+
+      request("/auth/login", "POST", {
+        username: this.login.username,
+        password: this.login.password,
+      }).then((data) => {
+        console.log(data);
+      });
       console.log(
         `start login..., username: ${this.login.username} , password: ${this.login.password}`
       );

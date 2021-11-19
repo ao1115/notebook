@@ -28,5 +28,9 @@ module.exports = {
     // config.plugin('svg-sprite').use(require('svg-sprite-loader-mod/plugin'), [{plainSprite: true}])
     // config.module.rule('svg').exclude.add(dir)
 
+  },
+  devServer: {
+    host: '127.0.0.1',
+    port: 8080
   }
 }

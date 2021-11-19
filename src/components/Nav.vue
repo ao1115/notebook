@@ -10,15 +10,24 @@
     </div>
     <div class="info">
       <Avatar />
+      <button @click="logout">退出登录</button>
     </div>
   </div>
 </template>
 
 <script>
 import Avatar from "@/components/Avatar.vue";
-
+import request from "@/helpers/request";
 export default {
   components: { Avatar },
+  methods: {
+    logout() {
+      console.log("logout");
+      request("/auth/logout", "get").then((data) => {
+        console.log(data);
+      });
+    },
+  },
 };
 </script>
 
