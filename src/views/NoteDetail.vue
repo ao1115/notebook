@@ -1,7 +1,21 @@
 <template>
-  <div>小计</div>
+  <div>{{ message }}</div>
 </template>
-
+<script>
+import Auth from "@/apis/auth";
+export default {
+  data() {
+    return { message: "小计" };
+  },
+  created() {
+    Auth.getInfo().then((data) => {
+      if (!data.isLogin) {
+        this.$router.push({ path: "/login" });
+      }
+    });
+  },
+};
+</script>
 
 
 <style lang="scss" scoped>
