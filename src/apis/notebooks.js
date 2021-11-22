@@ -1,4 +1,4 @@
-import { friendlyDate } from "../helpers/util"
+
 import request from "../helpers/request";
 const URL = {
     GET: '/notebooks',
@@ -14,11 +14,13 @@ export default {
                 res.data.forEach(notebook => {
                     let date = new Date(notebook.createdAt)
                     console.log(date)
-                    let Y = date.getFullYear() + '-';
+                    // let Y = date.getFullYear() + '-';
                     let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
                     let D = date.getDate() + ' ';
-                    console.log(Y + M + D);
-                    notebook.createdAt = Y + M + D
+                    let h = date.getHours() + ':';
+                    let m = date.getMinutes();
+                    console.log(M + D + h + m);
+                    notebook.createdAt = M + D + h + m
                 })
                 resolve(res)
                 console.log(res)

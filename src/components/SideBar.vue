@@ -36,13 +36,12 @@
 <style lang="scss" scoped>
 .side-bar {
   height: 100%;
-  background-color: #fafafa;
   display: flex;
   flex-direction: row;
 }
 .icons {
   width: 256px;
-  background-color: #f5f5f5;
+  background-color: #fafafa;
   display: flex;
   flex-direction: column;
   padding: 24px 8px;
@@ -54,7 +53,7 @@
     color: #595959;
     height: 32px;
     &.selected {
-      background-color: #333;
+      background-color: #f5f5f5;
     }
     > svg {
       margin-right: 8px;

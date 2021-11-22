@@ -8,17 +8,17 @@
       <input type="search" placeholder="搜索" />
       <Icon name="search" />
     </div>
-    <div class="info">
-      <div class="add" @click="onCreate">
+    <ul class="info">
+      <li class="add" @click="onCreate">
         <Icon name="add" />
         <span>新建</span>
-      </div>
-      <Avatar />
-      <div class="logout" @click="logout">
+      </li>
+      <li><Avatar /></li>
+      <li class="logout" @click="logout">
         <Icon name="logout" />
         <span>退出</span>
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -37,11 +37,28 @@ export default {
       });
     },
     onCreate() {
-      let title = window.prompt("请输入标题");
-      if (title.trim() === "") {
-        alert("笔记标题不能为空");
-        return;
-      }
+      this.$prompt("请输入笔记本标题", "新建笔记本", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputPattern: /^.{1,30}$/,
+        inputErrorMessage: "标记不能为空，且不能超过30个字符",
+      })
+        .then(({ value }) => {
+          return NoteBooks.addNoteBook({ title: value });
+        })
+        .then((res) => {
+          this.notebooks.unshift(res.data);
+          this.$message({
+            type: "success",
+            message: res.msg,
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: res.msg,
+          });
+        });
       NoteBooks.addNoteBook({ title }).then((res) => {
         this.notebooks.unshift(res.data);
         console.log(res);
@@ -59,22 +76,32 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  padding: 0 8px;
-  margin-left: 8px;
+  padding-left: 24px;
+  padding-right: 24px;
+  border-bottom: 1px solid #f5f5f5;
   > .logo {
     width: 232px;
     height: 100%;
+    margin: 10px;
     > .icon {
       width: 32px;
       height: 32px;
+      color: rgb(38, 112, 248);
+    }
+    > span {
+      position: absolute;
+      top: 25px;
+      color: rgb(38, 112, 248);
     }
   }
   .search {
     position: relative;
+    top: 6px;
+    right: 308px;
     > input {
       width: 200px;
       height: 32px;
-      border: 1px solid #d3d3d3;
+      border: 1px solid #f5f5f5;
       border-radius: 8px;
       text-align: left;
       padding: 0 24px;
@@ -89,10 +116,18 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 0 4px;
+    padding: 10px 8px;
     .icon {
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
+    }
+    > li {
+      margin-right: 10px;
+    }
+    .add {
+      > span {
+        line-height: 24px;
+      }
     }
   }
 }

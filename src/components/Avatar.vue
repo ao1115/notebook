@@ -36,9 +36,9 @@ span {
   text-align: center;
   line-height: 32px;
   border-radius: 50%;
-  background: #f2b81c;
+  background: rgb(78, 139, 252);
   color: #fff;
-  text-shadow: 1px 0 1px #795c19;
+  text-shadow: 1px 0 1px rgb(25, 102, 247);
   font-weight: bold;
   text-transform: uppercase;
   font-size: 18px;
