@@ -9,17 +9,12 @@
       >
         <Icon name="gongzuotai" />工作台</router-link
       >
-      <router-link
-        to="/note/1"
-        title="小计"
-        class="item"
-        active-class="selected"
-      >
+      <router-link to="/note" title="小计" class="item" active-class="selected">
         <Icon name="notes" />
         小计</router-link
       >
       <router-link
-        to="/trash/2"
+        to="/trash"
         title="回收站"
         class="item"
         active-class="selected"

@@ -22,12 +22,12 @@ const routes: Array<RouteConfig> = [
     component: NoteBookList
   },
   {
-    path: '/note/:noteId',
+    path: '/note',
     name: 'NoteDetail.vue',
     component: NoteDetail
   },
   {
-    path: '/trash/:noteId',
+    path: '/trash',
     name: 'TashDetail',
     component: TashDetail
   },

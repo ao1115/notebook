@@ -5,7 +5,7 @@
       <li v-for="notebook in notebooks" :key="notebook.id">
         <Icon name="notebook" class="notebook-icon" />
         <div class="title">
-          <router-link to="/note/1">
+          <router-link :to="`/note?notebookId =${notebook.id} `">
             <span class="notebook-title">{{ notebook.title }}</span>
           </router-link>
           <span @click.stop.prevent="onEdit(notebook)" class="onEdit"
