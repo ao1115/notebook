@@ -9,8 +9,15 @@
       <Icon name="search" />
     </div>
     <div class="info">
+      <div class="add" @click="onCreate">
+        <Icon name="add" />
+        <span>新建</span>
+      </div>
       <Avatar />
-      <button @click="logout">退出登录</button>
+      <div class="logout" @click="logout">
+        <Icon name="logout" />
+        <span>退出</span>
+      </div>
     </div>
   </div>
 </template>
@@ -18,13 +25,27 @@
 <script>
 import Avatar from "@/components/Avatar.vue";
 import Auth from "@/apis/auth";
+import Icon from "./Icon.vue";
+import NoteBooks from "@/apis/notebooks";
 export default {
-  components: { Avatar },
+  components: { Avatar, Icon },
   methods: {
     logout() {
       console.log("logout");
       Auth.logout().then((data) => {
         this.$router.push({ path: "login" });
+      });
+    },
+    onCreate() {
+      let title = window.prompt("请输入标题");
+      if (title.trim() === "") {
+        alert("笔记标题不能为空");
+        return;
+      }
+      NoteBooks.addNoteBook({ title }).then((res) => {
+        this.notebooks.unshift(res.data);
+        console.log(res);
+        console.log(res.msg);
       });
     },
   },
@@ -65,6 +86,14 @@ export default {
     }
   }
   .info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0 4px;
+    .icon {
+      width: 32px;
+      height: 32px;
+    }
   }
 }
 @import "~@/assets/style/reset.scss";

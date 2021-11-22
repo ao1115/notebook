@@ -1,6 +1,4 @@
 import axios from 'axios'
-import baseURL from './config-baseURL'
-//https://note-server.hunger-valley.com
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-from-urlencoded'
 axios.defaults.baseURL = 'https://note-server.hunger-valley.com' //服务端地址放在这里，发请求的时候只需要写它后面的url就可以
 axios.defaults.withCredentials = true; //表示允许跨域
