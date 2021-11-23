@@ -13,28 +13,24 @@ export default {
                 res.data = res.data.sort((a, b) => b.createdAt < a.createdAt)
                 res.data.forEach(notebook => {
                     let date = new Date(notebook.createdAt)
-                    console.log(date)
-                    // let Y = date.getFullYear() + '-';
                     let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
                     let D = date.getDate() + ' ';
                     let h = date.getHours() + ':';
                     let m = date.getMinutes();
-                    console.log(M + D + h + m);
                     notebook.createdAt = M + D + h + m
                 })
                 resolve(res)
-                console.log(res)
             }).catch(err => {
                 reject(err)
             })
         })
 
     },
-    updateNoteBook(noteBookId, { title = "" } = { title: {} }) {
-        return request(URL.UPDATE.replace(':id', noteBookId), 'POST', { title })
+    updateNoteBook(notebookId, { title = "" } = { title: {} }) {
+        return request(URL.UPDATE.replace(':id', notebookId), 'PATCH', { title })
     },
-    deleteNoteBook(noteBookId) {
-        return request(URL.DELETE.replace(':id', noteBookId), 'DELETE')
+    deleteNoteBook(notebookId) {
+        return request(URL.DELETE.replace(':id', notebookId), 'DELETE')
     },
     addNoteBook({ title = "" } = { title: {} }) {
         return request(URL.ADD, 'POST', { title })
