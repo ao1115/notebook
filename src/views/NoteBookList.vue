@@ -86,7 +86,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: res.msg,
+            message: "创建失败",
           });
         });
     },

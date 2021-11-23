@@ -1,56 +1,61 @@
 <template>
   <div>
-    <div class="nav">
-      <div class="search">
-        <input type="search" placeholder="搜索" />
-        <Icon name="search" />
+    <div v-show="isShowNotes">
+      <div class="nav">
+        <div class="search">
+          <input type="search" placeholder="搜索" />
+          <Icon name="search" />
+        </div>
+        <ul class="info">
+          <li class="add" @click="onCreate">
+            <Icon name="add" />
+            <span>新建</span>
+          </li>
+          <li><Avatar /></li>
+          <li class="logout" @click="logout">
+            <Icon name="logout" />
+            <span>退出</span>
+          </li>
+        </ul>
       </div>
-      <ul class="info">
-        <li class="add" @click="onCreate">
-          <Icon name="add" />
-          <span>新建</span>
+      <div class="notebooks">
+        <el-dropdown @command="handleCommand">
+          <span class="el-dropdown-link">
+            {{ currentBook.title }}
+            <i class="el-icon-arrow-down el-icon--right"></i>
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item
+              :command="notebook.id"
+              v-for="notebook in notebooks"
+              :key="notebook.id"
+            >
+              {{ notebook.title }}</el-dropdown-item
+            >
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
+
+      <ul class="note-detail">
+        <li class="name">
+          <span>名称</span>
+          <span>更新时间</span>
         </li>
-        <li><Avatar /></li>
-        <li class="logout" @click="logout">
-          <Icon name="logout" />
-          <span>退出</span>
+        <li class="notes" v-for="note in notes" :key="note.id">
+          <span class="names">
+            <router-link
+              :to="`/note?noteId = ${note.id}&notebookId = ${currentBook.id}`"
+            >
+              {{ note.title }}</router-link
+            >
+          </span>
+          <span>{{ note.updateAt }}</span>
         </li>
       </ul>
     </div>
-    <div class="notebooks">
-      <el-dropdown @command="handleCommand">
-        <span class="el-dropdown-link">
-          {{ currentBook.title }}
-          <i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item
-            :command="notebook.id"
-            v-for="notebook in notebooks"
-            :key="notebook.id"
-          >
-            {{ notebook.title }}</el-dropdown-item
-          >
-        </el-dropdown-menu>
-      </el-dropdown>
+    <div>
+      <Edit v-show="isShowEdit" />
     </div>
-
-    <ul class="note-detail">
-      <li class="name">
-        <span>名称</span>
-        <span>更新时间</span>
-      </li>
-      <li class="notes" v-for="note in notes" :key="note.id">
-        <span class="names">
-          <router-link
-            :to="`/note?noteId = ${note.id}&notebookId = ${currentBook.id}`"
-          >
-            {{ note.title }}</router-link
-          >
-        </span>
-        <span>{{ note.updateAt }}</span>
-      </li>
-    </ul>
   </div>
 </template>
 <script>
@@ -58,14 +63,17 @@ import Auth from "@/apis/auth";
 import NoteBooks from "@/apis/notebooks";
 import Notes from "@/apis/notes";
 import Avatar from "@/components/Avatar.vue";
+import Edit from "@/views/Edit.vue";
 export default {
-  components: { Avatar },
+  components: { Avatar, Edit },
   data() {
     return {
       notebooks: [],
       notes: [],
       currentBook: {},
       currenNote: {},
+      isShowEdit: false,
+      isShowNotes: true,
     };
   },
   created() {
@@ -98,28 +106,8 @@ export default {
     },
     //新建笔记
     onCreate() {
-      this.$prompt("请输入标题", "新建笔记", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        inputPattern: /^.{1,30}$/,
-        inputErrorMessage: "标记不能为空，且不能超过30个字符",
-      })
-        .then(({ value }) => {
-          return Notes.addNote({ title: value, content });
-        })
-        .then((res) => {
-          this.notes.unshift(res.data);
-          this.$message({
-            type: "success",
-            message: "创建成功",
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "创建失败",
-          });
-        });
+      this.isShowEdit = true;
+      this.isShowNotes = false;
     },
 
     handleCommand(notebookId) {

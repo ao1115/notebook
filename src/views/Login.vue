@@ -44,7 +44,7 @@
 
    <script>
 import Auth from "@/apis/auth";
-import Vue from "vue";
+
 import Bus from "@/helpers/bus";
 //在开始的时候获取登录状态
 Auth.getInfo().then((data) => {

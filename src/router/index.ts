@@ -28,11 +28,6 @@ const routes: Array<RouteConfig> = [
     component: NoteDetail
   },
   {
-    path: '/note',
-    name: 'Edit.vue',
-    component: Edit
-  },
-  {
     path: '/trash',
     name: 'TashDetail',
     component: TashDetail

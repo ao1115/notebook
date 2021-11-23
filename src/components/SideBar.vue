@@ -31,14 +31,6 @@
         >
           <Icon name="remove" />回收站</router-link
         >
-        <router-link
-          to="/edit"
-          title="回收站"
-          class="item"
-          active-class="selected"
-        >
-          <Icon name="remove" />编辑</router-link
-        >
       </div>
     </div>
     <router-view />
