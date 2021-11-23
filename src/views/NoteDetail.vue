@@ -7,7 +7,7 @@
           <Icon name="search" />
         </div>
         <ul class="info">
-          <li class="add" @click="onCreate">
+          <li class="add">
             <Icon name="add" />
             <span>新建</span>
           </li>
@@ -42,19 +42,40 @@
           <span>更新时间</span>
         </li>
         <li class="notes" v-for="note in notes" :key="note.id">
-          <span class="names">
+          <span class="names" @click="onCreate">
             <router-link
               :to="`/note?noteId = ${note.id}&notebookId = ${currentBook.id}`"
             >
               {{ note.title }}</router-link
             >
           </span>
-          <span>{{ note.updateAt }}</span>
+          <span>{{ note.updatedAt }}</span>
         </li>
       </ul>
     </div>
-    <div>
-      <Edit v-show="isShowEdit" />
+    <div class="edit-content" v-show="isShowEdit">
+      <h3 class="note-title">{{ this.notes }}</h3>
+      <div class="about">
+        <ul>
+          <li>{{ username }}</li>
+          <li>|</li>
+          <li>{{}}</li>
+          <li>|</li>
+          <li>更新时间11:30</li>
+        </ul>
+        <ul>
+          <li>markdown</li>
+          <li>删除</li>
+        </ul>
+      </div>
+      <div class="edit">
+        <div>
+          <input type="text" v-model="notetitle" placeholder="请输入标题" />
+        </div>
+        <div>
+          <textarea v-model="notecontent" placeholder="请输入内容"></textarea>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -63,9 +84,9 @@ import Auth from "@/apis/auth";
 import NoteBooks from "@/apis/notebooks";
 import Notes from "@/apis/notes";
 import Avatar from "@/components/Avatar.vue";
-import Edit from "@/views/Edit.vue";
+window.Notes = Notes;
 export default {
-  components: { Avatar, Edit },
+  components: { Avatar },
   data() {
     return {
       notebooks: [],
@@ -74,20 +95,28 @@ export default {
       currenNote: {},
       isShowEdit: false,
       isShowNotes: true,
+      username: "",
+      notetitle: "",
+      notecontent: "",
     };
   },
+
   created() {
     Auth.getInfo().then((data) => {
       if (!data.isLogin) {
         this.$router.push({ path: "/login" });
       }
     });
+    Auth.getInfo().then((res) => {
+      this.username = res.data.username;
+    });
     NoteBooks.getAll()
       .then((res) => {
         this.notebooks = res.data;
+        console.log(this.$route.query);
         this.currentBook =
           this.notebooks.find((notebook) => {
-            notebook.id == this.$route.query.notebookId;
+            notebook.id == this.$route.query;
           }) ||
           this.notebooks[0] ||
           {};
@@ -95,9 +124,12 @@ export default {
       })
       .then((res) => {
         this.notes = res.data;
+        console.log(this.notes);
       });
   },
+
   methods: {
+    //判断是否是登录状态
     logout() {
       console.log("logout");
       Auth.logout().then((res) => {
@@ -108,12 +140,23 @@ export default {
     onCreate() {
       this.isShowEdit = true;
       this.isShowNotes = false;
+      console.log(this.notetitle);
+      console.log(this.notecontent);
+      Notes.addNote({
+        notebookId: this.currentBook.id,
+        title: this.notetitle,
+        content: this.notecontent,
+      }).then((res) => {
+        console.log(res.msg);
+      });
     },
+    goBack() {},
 
+    //element-ui下拉菜单实现跳转
     handleCommand(notebookId) {
       console.log(notebookId);
       this.currentBook = this.notebooks.find(
-        (notebook) => notebook.id === notebookId
+        (notebook) => notebook.id == notebookId
       );
       Notes.getAll({ notebookId }).then((res) => {
         this.notes = res.data;
@@ -204,6 +247,41 @@ export default {
   }
   .notes {
     .names {
+    }
+  }
+}
+.edit-content {
+  display: flex;
+  flex-direction: column;
+  .about {
+    height: 56px;
+    width: 990px;
+    border: 1px solid red;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    > ul {
+      display: block;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  }
+  .edit {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    display: block;
+    margin-left: 24px;
+
+    & input {
+      border-bottom: 1px solid #f5f5f5;
+      margin-top: 24px;
+      width: 960px;
+    }
+    & textarea {
+      margin-top: 24px;
+      width: 960px;
     }
   }
 }

@@ -4,7 +4,6 @@ import Login from '@/views/Login.vue'
 import NoteBookList from '@/views/NoteBookList.vue'
 import NoteDetail from '@/views/NoteDetail.vue'
 import TashDetail from '@/views/TashDetail.vue'
-import Edit from '@/views/Edit.vue'
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
