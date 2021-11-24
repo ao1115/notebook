@@ -87,23 +87,8 @@ export default {
         this.$router.push({ path: "login" });
       });
     },
-    //新建笔记
-    // onCreate() {
-    //   this.isShowEdit = true;
-    //   this.isShowNotes = false;
-    // },
-    // onSave() {
-    //   this.$router.back(-1);
-    //   this.isShowEdit = false;
-    //   this.isShowNotes = true;
-    // },
-    // goBack() {
-    //   history.pushState(null, null, document.URL);
-    //   window.addEventListener("popstate", this.goBack, false);
-    //   this.isShowEdit = false;
-    //   this.isShowNotes = true;
-    // },
 
+    //新建笔记
     addNote() {
       let newtitle = window.prompt("请输入标题");
       Notes.addNote({ notebookId: this.currentBook.id }, { title: newtitle })
@@ -140,7 +125,6 @@ export default {
   height: 32px;
   margin-top: 24px;
   border-bottom: 1px solid #f5f5f5;
-
   line-height: 12px;
   padding-left: 12px;
   padding-right: 12px;
@@ -154,7 +138,6 @@ export default {
 }
 
 .note-detail {
-  width: 260px;
   display: flex;
   flex-direction: column;
   > li {

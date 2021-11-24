@@ -1,25 +1,10 @@
 <template>
   <div>
-    <div class="nav">
-      <div class="search">
-        <input type="search" placeholder="搜索" />
-        <Icon name="search" />
-      </div>
-      <ul class="info">
-        <li class="add">
-          <Icon name="add" />
-          <span>新建</span>
-        </li>
-        <li><Avatar /></li>
-        <li class="logout" @click="logout">
-          <Icon name="logout" />
-          <span>退出</span>
-        </li>
-      </ul>
-    </div>
     <div class="note-detail">
-      <NoteSideBar @update:notes="(value) => (notes = value)" />
-      <div class="note-empty" v-show="!currentNote.id">请选择笔记</div>
+      <NoteSideBar
+        @update:notes="(value) => (notes = value)"
+        v-show="!currentNote.id"
+      />
       <div
         class="edit-content"
         @update:notes="(value) => (notes = value)"
@@ -89,6 +74,7 @@ export default {
       username: "",
       statusText: "未更新",
       isShowPreview: false,
+      isShowEdit: false,
     };
   },
 
@@ -122,6 +108,9 @@ export default {
   },
 
   methods: {
+    Save() {
+      console.log("save");
+    },
     //判断是否是登录状态
     logout() {
       console.log("logout");
@@ -161,55 +150,7 @@ export default {
   },
 };
 </script>
-
-
 <style lang="scss" scoped>
-.nav {
-  height: 60px;
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding-left: 24px;
-  padding-right: 24px;
-  border-bottom: 1px solid #f5f5f5;
-  > .search {
-    position: relative;
-    top: 6px;
-    // right: 308px;
-    > input {
-      width: 200px;
-      height: 32px;
-      border: 1px solid #f5f5f5;
-      border-radius: 8px;
-      text-align: left;
-      padding: 0 24px;
-    }
-    > .icon {
-      position: absolute;
-      top: 8px;
-      left: 4px;
-    }
-  }
-  .info {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 10px 8px;
-    .icon {
-      width: 24px;
-      height: 24px;
-    }
-    > li {
-      margin-right: 10px;
-    }
-    .add {
-      > span {
-        line-height: 24px;
-      }
-    }
-  }
-}
 .note-detail {
   display: flex;
   flex-direction: row;
