@@ -18,29 +18,45 @@
       </ul>
     </div>
     <div class="note-detail">
-      <NoteSideBar />
-      <div class="edit-content" @update:notes="(value) => (notes = value)">
-        <h3 class="note-title">笔记标题</h3>
+      <NoteSideBar @update:notes="(value) => (notes = value)" />
+      <div class="note-empty" v-show="!currentNote.id">请选择笔记</div>
+      <div
+        class="edit-content"
+        @update:notes="(value) => (notes = value)"
+        v-show="currentNote.id"
+      >
+        <h3 class="note-title">{{ currentNote.title }}</h3>
         <div class="about">
           <ul>
-            <li>作者</li>
+            <li>{{ username }}</li>
             <li>|</li>
             <li>笔记本标题</li>
             <li>|</li>
-            <li>更新时间</li>
+            <li>{{ currentNote.updateAt }}</li>
+            <li>|</li>
+            <li>{{ statusText }}</li>
           </ul>
           <ul>
             <li>markdown</li>
-            <li>删除</li>
-            <li>保存</li>
+            <li @click="deleteNote">删除</li>
+            <li @click="onSave">保存</li>
           </ul>
         </div>
         <div class="edit">
           <div>
-            <input type="text" placeholder="请输入标题" />
+            <input
+              type="text"
+              placeholder="请输入标题"
+              v-model="currentNote.title"
+              @keydown="statusText = '正在输入…'"
+            />
           </div>
           <div>
-            <textarea placeholder="请输入内容"></textarea>
+            <textarea
+              placeholder="请输入内容"
+              v-model="currentNote.content"
+              @keydown="statusText = '正在输入…'"
+            ></textarea>
           </div>
         </div>
       </div>
@@ -53,6 +69,8 @@ import NoteBooks from "@/apis/notebooks";
 import Notes from "@/apis/notes";
 import Avatar from "@/components/Avatar.vue";
 import NoteSideBar from "./NoteSideBar.vue";
+import Bus from "@/helpers/bus";
+import _ from "lodash";
 window.Notes = Notes;
 export default {
   components: { Avatar, NoteSideBar },
@@ -60,9 +78,9 @@ export default {
     return {
       notebooks: [],
       notes: [],
-      currentBook: {},
       currentNote: {},
       username: "",
+      statusText: "未更新",
     };
   },
 
@@ -75,23 +93,56 @@ export default {
     Auth.getInfo().then((res) => {
       this.username = res.data.username;
     });
+    //第一次进来的时候刷新编辑页面出现数据
+    Bus.$on("update:notes", (value) => {
+      this.currentNote = value.find(
+        (note) => note.id == this.$route.query.noteId
+      );
+    });
   },
   beforeRouteUpdate(to, from, next) {
     console.log(to.query.noteId, from);
-    // this.currentNote = this.notes.find((note) => note.id === to.query.noteId);
+    this.currentNote =
+      this.notes.find((note) => note.id == to.query.noteId) || {};
     next();
   },
 
   methods: {
-    getQuery() {
-      console.log(this.$route.query);
-    },
     //判断是否是登录状态
     logout() {
       console.log("logout");
       Auth.logout().then((res) => {
         this.$router.push({ path: "login" });
       });
+    },
+    //保存笔记
+    onSave() {
+      Notes.updateNote(
+        { noteId: this.currentNote.id },
+        { title: this.currentNote.title, content: this.currentNote.content }
+      )
+        .then((res) => {
+          this.$message(res.msg);
+          console.log("保存成功");
+          this.statusText = "已保存";
+        })
+        .catch((res) => {
+          console.log("保存失败");
+          this.statusText = "保存失败";
+        });
+    },
+    //删除笔记
+    deleteNote() {
+      Notes.deleteNote({ noteId: this.currentNote.id })
+        .then((data) => {
+          this.$message(data.msg);
+          console.log("删除成功");
+          this.notes.splice(this.notes.indexOf(this.currentNote), 1);
+          this.$router.replace({ path: "/note" });
+        })
+        .catch((res) => {
+          console.log("删除失败");
+        });
     },
   },
 };
@@ -148,6 +199,13 @@ export default {
 .note-detail {
   display: flex;
   flex-direction: row;
+  .note-empty {
+    font-size: 50px;
+    margin-top: 100px;
+    text-align: center;
+    color: #ccc;
+    width: 630px;
+  }
 }
 .edit-content {
   display: flex;

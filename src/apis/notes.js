@@ -34,6 +34,20 @@ export default {
         return request(URL.DELETE.replace(':noteId', noteId), 'DELETE')
     },
     addNote({ notebookId }, { title = "", content = "" } = { title: {}, content: {} }) {
-        return request(URL.ADD.replace(':notebookId', notebookId), 'POST', { title, content })
+        return new Promise((resolve, reject) => {
+            request(URL.ADD.replace(':notebookId', notebookId), 'POST', { title, content }).then(res => {
+                let date = new Date(res.data.updatedAt)
+                // let Y = date.getFullYear() + '-';
+                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
+                let D = date.getDate() + ' ';
+                let h = date.getHours() + ':';
+                let m = date.getMinutes();
+                res.data.updatedAt = M + D + h + m
+                resolve(res)
+                console.log(res)
+            }).catch(err => {
+                reject(err)
+            })
+        })
     }
 }

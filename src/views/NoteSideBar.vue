@@ -17,6 +17,7 @@
             >
           </el-dropdown-menu>
         </el-dropdown>
+        <button @click="addNote">添加笔记</button>
       </div>
 
       <ul class="note-detail">
@@ -43,23 +44,17 @@ import Auth from "@/apis/auth";
 import NoteBooks from "@/apis/notebooks";
 import Notes from "@/apis/notes";
 import Avatar from "@/components/Avatar.vue";
+import Bus from "@/helpers/bus";
 window.Notes = Notes;
 export default {
   components: { Avatar },
   created() {
-    Auth.getInfo().then((data) => {
-      if (!data.isLogin) {
-        this.$router.push({ path: "/login" });
-      }
-    });
     Auth.getInfo().then((res) => {
       this.username = res.data.username;
     });
     NoteBooks.getAll()
       .then((res) => {
         this.notebooks = res.data;
-        console.log(this.notebooks);
-        console.log(this.$route.query.notebookId);
         this.currentBook =
           this.notebooks.find(
             (notebook) => notebook.id == this.$route.query.notebookId
@@ -71,6 +66,7 @@ export default {
       .then((res) => {
         this.notes = res.data;
         this.$emit("update:notes", this.notes);
+        Bus.$emit("update:notes", this.notes);
       });
   },
   data() {
@@ -82,7 +78,7 @@ export default {
       username: "",
     };
   },
-
+  props: ["currentNote"],
   methods: {
     //判断是否是登录状态
     logout() {
@@ -107,6 +103,19 @@ export default {
     //   this.isShowEdit = false;
     //   this.isShowNotes = true;
     // },
+
+    addNote() {
+      let newtitle = window.prompt("请输入标题");
+      Notes.addNote({ notebookId: this.currentBook.id }, { title: newtitle })
+        .then((res) => {
+          console.log(res);
+          this.notes.unshift(res.data);
+        })
+        .catch((res) => {
+          console.log(res);
+        });
+    },
+
     //element-ui下拉菜单实现跳转
     handleCommand(notebookId) {
       this.currentBook = this.notebooks.find(
