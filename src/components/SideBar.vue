@@ -12,7 +12,7 @@
           class="item"
           active-class="selected"
         >
-          <Icon name="gongzuotai" />工作台</router-link
+          <Icon name="gongzuotai" />笔记本</router-link
         >
         <router-link
           to="/note"
@@ -21,7 +21,7 @@
           active-class="selected"
         >
           <Icon name="notes" />
-          小计</router-link
+          记一笔</router-link
         >
         <router-link
           to="/trash"
@@ -33,7 +33,7 @@
         >
       </div>
     </div>
-    <router-view />
+    <router-view class="notebooks" />
   </div>
 </template>
 
@@ -83,6 +83,10 @@
         margin-right: 8px;
       }
     }
+  }
+  .notebooks {
+    width: calc(100% - 256px);
+    margin-right: 12px;
   }
 }
 

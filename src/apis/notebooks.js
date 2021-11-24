@@ -1,4 +1,4 @@
-
+import dayjs from "dayjs";
 import request from "../helpers/request";
 const URL = {
     GET: '/notebooks',
@@ -12,12 +12,9 @@ export default {
             return request(URL.GET,).then(res => {
                 res.data = res.data.sort((a, b) => b.createdAt < a.createdAt)
                 res.data.forEach(notebook => {
-                    let date = new Date(notebook.createdAt)
-                    let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-                    let D = date.getDate() + ' ';
-                    let h = date.getHours() + ':';
-                    let m = date.getMinutes();
-                    notebook.createdAt = M + D + h + m
+                    let date = new Date(notebook.createdAt).toISOString()
+                    let d = dayjs(date).format('MM-DD HH:mm')
+                    notebook.createdAt = d
                 })
                 resolve(res)
             }).catch(err => {
@@ -33,6 +30,16 @@ export default {
         return request(URL.DELETE.replace(':id', notebookId), 'DELETE')
     },
     addNoteBook({ title = "" } = { title: {} }) {
-        return request(URL.ADD, 'POST', { title })
+        return new Promise((resolve, reject) => {
+            request(URL.ADD, 'POST', { title }).then(res => {
+                let date = new Date(res.data.createdAt).toISOString()
+                let d = dayjs(date).format('MM-DD HH:mm')
+                res.data.createdAt = d
+                resolve(res)
+                console.log(res)
+            }).catch(err => {
+                reject(err)
+            })
+        })
     }
 }

@@ -8,12 +8,10 @@
       <ul class="info">
         <li class="add" @click="onCreate">
           <Icon name="add" />
-          <span>新建</span>
         </li>
         <li><Avatar /></li>
         <li class="logout" @click="logout">
           <Icon name="logout" />
-          <span>退出</span>
         </li>
       </ul>
     </div>
@@ -25,7 +23,7 @@
           <router-link :to="`/note?notebookId=${notebook.id}`">
             <span class="notebook-title">{{ notebook.title }}</span>
           </router-link>
-          <span>({{ notebook.noteCounts }})</span>
+          <span class="noteCounts">{{ notebook.noteCounts }}</span>
           <span @click.stop.prevent="onEdit(notebook)" class="onEdit"
             ><Icon name="pan" class="pan"
           /></span>
@@ -179,8 +177,9 @@ export default {
     justify-content: space-between;
     padding: 10px 8px;
     .icon {
-      width: 24px;
-      height: 24px;
+      width: 31px;
+      height: 32px;
+      color: rgb(38, 112, 248);
     }
     > li {
       margin-right: 10px;
@@ -198,7 +197,6 @@ export default {
   margin-left: 50px;
 }
 .notebooks {
-  min-width: 800px;
   > li {
     display: flex;
     flex-direction: row;
@@ -217,11 +215,17 @@ export default {
       }
       .icon {
         margin-left: 10px;
-        color: #a7a7a7;
+        color: #ccc;
       }
       .pan {
         visibility: hidden;
       }
+    }
+    .noteCounts {
+      margin-left: 8px;
+      font-size: 12px;
+      color: #ccc;
+      font-weight: bolder;
     }
   }
   > li:hover {

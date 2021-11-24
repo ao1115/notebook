@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import request from "../helpers/request";
 const URL = {
     GET: '/notes/from/:notebookId',
@@ -11,13 +12,9 @@ export default {
             return request(URL.GET.replace(':notebookId', notebookId)).then(res => {
                 res.data = res.data.map(note => { note.createAt, note.updatedAt; return note }).sort((a, b) => a.updateAt - b.updateAt)
                 res.data.forEach(note => {
-                    let date = new Date(note.updatedAt)
-                    // let Y = date.getFullYear() + '-';
-                    let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-                    let D = date.getDate() + ' ';
-                    let h = date.getHours() + ':';
-                    let m = date.getMinutes();
-                    note.updatedAt = M + D + h + m
+                    let date = new Date(note.updatedAt).toISOString()
+                    let d = dayjs(date).format('MM-DD HH:mm')
+                    note.updatedAt = d
                 })
                 resolve(res)
                 console.log(res)
@@ -36,13 +33,9 @@ export default {
     addNote({ notebookId }, { title = "", content = "" } = { title: {}, content: {} }) {
         return new Promise((resolve, reject) => {
             request(URL.ADD.replace(':notebookId', notebookId), 'POST', { title, content }).then(res => {
-                let date = new Date(res.data.updatedAt)
-                // let Y = date.getFullYear() + '-';
-                let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
-                let D = date.getDate() + ' ';
-                let h = date.getHours() + ':';
-                let m = date.getMinutes();
-                res.data.updatedAt = M + D + h + m
+                let date = new Date(res.data.updatedAt).toISOString()
+                let d = dayjs(date).format('MM-DD HH:mm')
+                res.data.updatedAt = d
                 resolve(res)
                 console.log(res)
             }).catch(err => {
