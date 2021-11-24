@@ -12,19 +12,25 @@
       >
         <h3 class="note-title">{{ currentNote.title }}</h3>
         <div class="about">
-          <ul>
+          <ul class="crr">
             <li>{{ username }}</li>
             <li>|</li>
             <li>笔记本标题</li>
             <li>|</li>
-            <li>{{ currentNote.updateAt }}</li>
+            <li>{{ currentNote.updatedAt }}</li>
             <li>|</li>
             <li>{{ statusText }}</li>
           </ul>
-          <ul>
-            <li @click="isShowPreview = !isShowPreview">markdown</li>
-            <li @click="deleteNote">删除</li>
-            <li @click="onSave">保存</li>
+          <ul class="navbar">
+            <li @click="isShowPreview = !isShowPreview">
+              <Icon name="markdown" class="markdown" />
+            </li>
+            <li @click="deleteNote">
+              <Icon name="remove" class="remove" />
+            </li>
+            <li @click="onSave">
+              <Icon name="save" class="save" />
+            </li>
           </ul>
         </div>
         <div class="edit">
@@ -38,7 +44,7 @@
           </div>
           <div>
             <textarea
-              placeholder="请输入内容"
+              placeholder="请输入内容,支持Markdown语法…"
               v-model="currentNote.content"
               @keydown="statusText = '正在输入…'"
               v-show="!isShowPreview"
@@ -56,7 +62,6 @@
 </template>
 <script>
 import Auth from "@/apis/auth";
-import NoteBooks from "@/apis/notebooks";
 import Notes from "@/apis/notes";
 import Avatar from "@/components/Avatar.vue";
 import NoteSideBar from "./NoteSideBar.vue";
@@ -93,6 +98,7 @@ export default {
     Auth.getInfo().then((res) => {
       this.username = res.data.username;
     });
+
     //第一次进来的时候刷新编辑页面出现数据
     Bus.$on("update:notes", (value) => {
       this.currentNote = value.find(
@@ -154,32 +160,48 @@ export default {
 .note-detail {
   display: flex;
   flex-direction: row;
-  .note-empty {
-    font-size: 50px;
-    margin-top: 100px;
-    text-align: center;
-    color: #ccc;
-    width: 630px;
-  }
 }
 .edit-content {
   display: flex;
   flex-direction: column;
   .note-title {
     margin-left: 24px;
+    margin-top: 24px;
+    font-size: 36px;
+    font-weight: bold;
   }
   .about {
-    height: 56px;
-    width: 630px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-left: 24px;
+    color: #595959;
+    margin-top: 8px;
     > ul {
       display: block;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
+    }
+    .crr {
+      > li {
+        margin-left: 8px;
+        font-size: 14px;
+        &:nth-child(1) {
+          margin-left: 0px;
+        }
+        &:nth-child(5) {
+          margin-top: 2px;
+        }
+      }
+    }
+    .navbar {
+      .icon {
+        height: 24px;
+        width: 24px;
+        margin-right: 12px;
+        color: rgb(38, 112, 248);
+      }
     }
   }
   .edit {
@@ -191,12 +213,15 @@ export default {
 
     & input {
       border-bottom: 1px solid #f5f5f5;
-      margin-top: 24px;
       width: 960px;
+      height: 48px;
     }
     & textarea {
       margin-top: 24px;
       width: 960px;
+      height: calc(100vh - 60px);
+      overflow: hidden;
+      font-size: 14px;
     }
   }
 }
