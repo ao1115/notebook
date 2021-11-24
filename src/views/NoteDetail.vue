@@ -37,7 +37,7 @@
             <li>{{ statusText }}</li>
           </ul>
           <ul>
-            <li>markdown</li>
+            <li @click="isShowPreview = !isShowPreview">markdown</li>
             <li @click="deleteNote">删除</li>
             <li @click="onSave">保存</li>
           </ul>
@@ -56,7 +56,13 @@
               placeholder="请输入内容"
               v-model="currentNote.content"
               @keydown="statusText = '正在输入…'"
+              v-show="!isShowPreview"
             ></textarea>
+            <div
+              class="previw markdown-body"
+              v-html="previewContent"
+              v-show="isShowPreview"
+            ></div>
           </div>
         </div>
       </div>
@@ -70,7 +76,8 @@ import Notes from "@/apis/notes";
 import Avatar from "@/components/Avatar.vue";
 import NoteSideBar from "./NoteSideBar.vue";
 import Bus from "@/helpers/bus";
-import _ from "lodash";
+import MarkdownIt from "markdown-it";
+const md = new MarkdownIt();
 window.Notes = Notes;
 export default {
   components: { Avatar, NoteSideBar },
@@ -81,7 +88,14 @@ export default {
       currentNote: {},
       username: "",
       statusText: "未更新",
+      isShowPreview: false,
     };
+  },
+
+  computed: {
+    previewContent() {
+      return md.render(this.currentNote.content || "");
+    },
   },
 
   created() {
