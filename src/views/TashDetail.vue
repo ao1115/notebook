@@ -4,6 +4,8 @@
 
 <script>
 import Auth from "@/apis/auth";
+import Trash from "@/apis/trash";
+window.Trash = Trash;
 export default {
   data() {
     return { message: "回收站" };

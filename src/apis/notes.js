@@ -12,15 +12,12 @@ export default {
                 res.data = res.data.map(note => { note.createAt, note.updatedAt; return note }).sort((a, b) => a.updateAt - b.updateAt)
                 res.data.forEach(note => {
                     let date = new Date(note.updatedAt)
-                    console.log(date)
                     // let Y = date.getFullYear() + '-';
                     let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '-';
                     let D = date.getDate() + ' ';
                     let h = date.getHours() + ':';
                     let m = date.getMinutes();
-                    console.log(M + D + h + m);
                     note.updatedAt = M + D + h + m
-                    console.log(note.updatedAt)
                 })
                 resolve(res)
                 console.log(res)

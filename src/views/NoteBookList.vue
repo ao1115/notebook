@@ -22,7 +22,7 @@
       <li v-for="notebook in notebooks" :key="notebook.id" class="notebook">
         <Icon name="notebook" class="notebook-icon" />
         <div class="title">
-          <router-link :to="`/note?notebookId =${notebook.id} `">
+          <router-link :to="`/note?notebookId=${notebook.id}`">
             <span class="notebook-title">{{ notebook.title }}</span>
           </router-link>
           <span>({{ notebook.noteCounts }})</span>
@@ -40,6 +40,7 @@
 </template>
 
 <script>
+window.NoteBooks = NoteBooks;
 import Auth from "@/apis/auth";
 import NoteBooks from "@/apis/notebooks";
 import Avatar from "@/components/Avatar.vue";
