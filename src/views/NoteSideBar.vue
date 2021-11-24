@@ -17,16 +17,19 @@
             >
           </el-dropdown-menu>
         </el-dropdown>
-        <button @click="addNote">添加笔记</button>
+        <div class="add" @click="addNote">
+          <Icon name="add" />
+        </div>
       </div>
 
       <ul class="note-detail">
         <li class="name">
-          <span>名称</span>
-          <span>更新时间</span>
+          <span class="title-name">名称</span>
+          <span class="update">更新时间</span>
         </li>
         <li class="notes" v-for="note in notes" :key="note.id">
           <span class="names">
+            <Icon name="notes" />
             <router-link
               :to="`/note?noteId=${note.id}&notebookId=${currentBook.id}`"
             >
@@ -90,14 +93,28 @@ export default {
 
     //新建笔记
     addNote() {
-      let newtitle = window.prompt("请输入标题");
-      Notes.addNote({ notebookId: this.currentBook.id }, { title: newtitle })
-        .then((res) => {
-          console.log(res);
-          this.notes.unshift(res.data);
+      this.$prompt("请输入笔记标题", "新建笔记", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+      })
+        .then(({ value }) => {
+          return Notes.addNote(
+            { notebookId: this.currentBook.id },
+            { title: value }
+          );
         })
-        .catch((res) => {
-          console.log(res);
+        .then((res) => {
+          this.notes.unshift(res.data);
+          this.$message({
+            type: "success",
+            message: res.msg,
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "创建失败",
+          });
         });
     },
 
@@ -119,7 +136,8 @@ export default {
 <style lang="scss" scoped>
 .note-side-bar {
   height: calc(100vh - 60px);
-  border-right: 1px solid #f5f5f5;
+
+  min-width: 960px;
 }
 .notebooks {
   height: 32px;
@@ -128,12 +146,26 @@ export default {
   line-height: 12px;
   padding-left: 12px;
   padding-right: 12px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
   .el-dropdown-link {
     cursor: pointer;
     color: #409eff;
   }
+  ::v-deep .el-dropdown {
+    font-size: 18px;
+  }
   .el-icon-arrow-down {
     font-size: 12px;
+  }
+  .add {
+    margin-right: 26px;
+    > .icon {
+      width: 32px;
+      height: 32px;
+      color: #409eff;
+    }
   }
 }
 
@@ -151,8 +183,13 @@ export default {
     padding-left: 12px;
     padding-right: 12px;
   }
-  .notes {
-    .names {
+
+  .name {
+    > :first-child {
+      margin-left: 28px;
+    }
+    > :nth-child(2) {
+      margin-right: 8px;
     }
   }
 }

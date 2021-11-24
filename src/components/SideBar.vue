@@ -52,12 +52,12 @@
       > .icon {
         width: 32px;
         height: 32px;
-        color: rgb(38, 112, 248);
+        color: #409eff;
       }
       > span {
         position: absolute;
         top: 3px;
-        color: rgb(38, 112, 248);
+        color: #409eff;
       }
     }
   }

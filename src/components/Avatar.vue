@@ -36,7 +36,7 @@ span {
   text-align: center;
   line-height: 32px;
   border-radius: 50%;
-  background: rgb(78, 139, 252);
+  background: #409eff;
   color: #fff;
   text-shadow: 1px 0 1px rgb(25, 102, 247);
   font-weight: bold;

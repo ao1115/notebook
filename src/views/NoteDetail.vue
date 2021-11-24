@@ -88,7 +88,7 @@ export default {
       return md.render(this.currentNote.content || "");
     },
   },
-
+  //判断是否登录
   created() {
     Auth.getInfo().then((data) => {
       if (!data.isLogin) {
@@ -114,9 +114,6 @@ export default {
   },
 
   methods: {
-    Save() {
-      console.log("save");
-    },
     //判断是否是登录状态
     logout() {
       console.log("logout");
@@ -131,12 +128,18 @@ export default {
         { title: this.currentNote.title, content: this.currentNote.content }
       )
         .then((res) => {
-          this.$message(res.msg);
+          this.$message({
+            type: "success",
+            message: res.msg,
+          });
           console.log("保存成功");
           this.statusText = "已保存";
         })
         .catch((res) => {
-          console.log("保存失败");
+          this.$message({
+            type: "info",
+            message: res.msg,
+          });
           this.statusText = "保存失败";
         });
     },
@@ -144,18 +147,26 @@ export default {
     deleteNote() {
       Notes.deleteNote({ noteId: this.currentNote.id })
         .then((data) => {
-          this.$message(data.msg);
+          this.$message({
+            type: "success",
+            message: data.msg,
+          });
           console.log("删除成功");
           this.notes.splice(this.notes.indexOf(this.currentNote), 1);
           this.$router.replace({ path: "/note" });
         })
         .catch((res) => {
-          console.log("删除失败");
+          this.$message({
+            type: "info",
+            message: res.msg,
+          });
         });
     },
   },
 };
 </script>
+
+
 <style lang="scss" scoped>
 .note-detail {
   display: flex;

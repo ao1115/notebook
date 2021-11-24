@@ -15,11 +15,14 @@
         </li>
       </ul>
     </div>
-    <div class="notebookList">笔记本列表{{ notebooks.length }}</div>
+    <div class="notebookList">
+      笔记本列表
+      <span class="count">{{ notebooks.length }}</span>
+    </div>
     <ul class="notebooks">
       <li v-for="notebook in notebooks" :key="notebook.id" class="notebook">
-        <Icon name="notebook" class="notebook-icon" />
         <div class="title">
+          <Icon name="notebook" class="notebook-icon" />
           <router-link :to="`/note?notebookId=${notebook.id}`">
             <span class="notebook-title">{{ notebook.title }}</span>
           </router-link>
@@ -29,7 +32,7 @@
           /></span>
         </div>
         <div>{{ notebook.createdAt }}</div>
-        <span @click.stop.prevent="onDelete(notebook)"
+        <span @click.stop.prevent="onDelete(notebook)" class="remove"
           ><Icon name="remove"
         /></span>
       </li>
@@ -177,17 +180,12 @@ export default {
     justify-content: space-between;
     padding: 10px 8px;
     .icon {
-      width: 31px;
+      width: 32px;
       height: 32px;
-      color: rgb(38, 112, 248);
+      color: #409eff;
     }
     > li {
       margin-right: 10px;
-    }
-    .add {
-      > span {
-        line-height: 24px;
-      }
     }
   }
 }
@@ -195,6 +193,13 @@ export default {
   height: 56px;
   line-height: 56px;
   margin-left: 50px;
+  color: #409eff;
+  font-size: 18px;
+  > .count {
+    margin-left: 2px;
+    font-size: 14px;
+    font-weight: bolder;
+  }
 }
 .notebooks {
   > li {
@@ -210,27 +215,34 @@ export default {
     > .title {
       min-width: 450px;
       margin-left: 10px;
-      > .notebook-title {
-        margin-left: 10px;
+      .notebook-title {
+        margin-left: 12px;
       }
       .icon {
         margin-left: 10px;
-        color: #ccc;
       }
       .pan {
         visibility: hidden;
+        color: #c3c3c3;
       }
     }
     .noteCounts {
       margin-left: 8px;
       font-size: 12px;
-      color: #ccc;
+      color: #c3c3c3;
       font-weight: bolder;
     }
   }
   > li:hover {
     .pan {
       visibility: visible;
+    }
+  }
+  .remove {
+    margin-right: 36px;
+    .icon {
+      width: 24px;
+      height: 20px;
     }
   }
 }
