@@ -34,7 +34,8 @@
     "src/**/*.vue",
     "tests/**/*.ts",
     "tests/**/*.tsx",
-    "src/helpers/bus.js"
+    "src/helpers/bus.js",
+    "src/store/index.ts"
   ],
   "exclude": [
     "node_modules"
