@@ -3,7 +3,9 @@
     <div class="modal-mask">
       <div class="modal-wrapper">
         <div class="modal-container">
-          <div class="main"></div>
+          <div class="main">
+            <Icon name="logo" />
+          </div>
           <div class="form">
             <h3 @click="showRegister">创建账户</h3>
             <div v-show="isShowRegister" class="register">
@@ -175,8 +177,14 @@ export default {
 
   .main {
     flex: 1;
-    background: #36bc64;
+    background: #91c6fc;
     background-size: contain;
+    > .icon {
+      width: 300px;
+      height: 300px;
+      margin: 115px;
+      color: #fff;
+    }
   }
   .form {
     width: 270px;
@@ -196,7 +204,7 @@ export default {
       }
     }
     .button {
-      background-color: #2bb964;
+      background-color: #91c6fc;
       height: 36px;
       line-height: 36px;
       text-align: center;
