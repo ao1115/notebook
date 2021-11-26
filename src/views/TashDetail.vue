@@ -197,7 +197,7 @@ export default {
     margin-left: 24px;
     border-top: 1px solid #f5f5f5;
     margin-top: 12px;
-    width: 960px;
+    min-width: 960px;
     height: calc(100vh - 60px);
     overflow: hidden;
     font-size: 14px;

@@ -257,12 +257,12 @@ export default {
 
     & input {
       border-bottom: 1px solid #f5f5f5;
-      width: 960px;
+      min-width: 960px;
       height: 48px;
     }
     & textarea {
       margin-top: 24px;
-      width: 960px;
+      min-width: 960px;
       height: calc(100vh - 60px);
       overflow: hidden;
       font-size: 14px;
