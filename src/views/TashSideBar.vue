@@ -6,11 +6,16 @@
           <span class="title-name">名称</span>
           <span class="update">删除时间</span>
         </li>
+        <div v-if="trashBooks.length == 0" class="no-notebook">
+          <span><Icon name="remove" /></span>
+          <span>回收站为空</span>
+        </div>
         <router-link
           class="notes"
           v-for="trash in trashBooks"
           :key="trash.id"
           :to="`/trash?noteId=${trash.id}`"
+          v-else
         >
           <span class="names">
             <Icon name="notes" />
@@ -129,6 +134,17 @@ export default {
     }
     > .icon {
       color: #409eff;
+    }
+  }
+  .no-notebook {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    color: #8ac3fc;
+    .icon {
+      width: 120px;
+      height: 120px;
+      margin: 120px 120px 10px 120px;
     }
   }
 }

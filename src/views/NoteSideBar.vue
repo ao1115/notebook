@@ -12,6 +12,7 @@
               :command="notebook.id"
               v-for="notebook in notebooks"
               :key="notebook.id"
+              icon="el-icon-circle-plus-outline"
             >
               {{ notebook.title }}</el-dropdown-item
             >
@@ -30,8 +31,11 @@
           </el-tooltip>
         </div>
       </div>
-
-      <ul class="note-detail">
+      <div v-if="notes.length == 0" class="no-notebook">
+        <span><Icon name="notes" /></span>
+        <span>暂无笔记，新建一个吧</span>
+      </div>
+      <ul class="note-detail" v-else>
         <li class="name">
           <span class="title-name">名称</span>
           <span class="update">更新时间</span>
@@ -119,10 +123,10 @@ export default {
             message: res.msg,
           });
         })
-        .catch(() => {
+        .catch((res) => {
           this.$message({
             type: "info",
-            message: "创建失败",
+            message: res.msg,
           });
         });
     },
@@ -143,12 +147,24 @@ export default {
 
 
 <style lang="scss" scoped>
+.no-notebook {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  color: #8ac3fc;
+  .icon {
+    width: 120px;
+    height: 120px;
+    margin: 120px 120px 10px 120px;
+  }
+}
+
 .note-side-bar {
   height: calc(100vh - 60px);
   min-width: 960px;
 }
 .notebooks {
-  margin-top: 24px;
+  margin-top: 26px;
   border-bottom: 1px solid #f5f5f5;
   padding-left: 12px;
   padding-right: 12px;
@@ -192,10 +208,11 @@ export default {
     padding-right: 28px;
     font-size: 14px;
   }
-  > li:hover {
+  > .notes:hover {
     background-color: #f5f5f5;
   }
   .name {
+    color: #409eff;
     > :first-child {
       margin-left: 28px;
     }

@@ -97,10 +97,6 @@ export default {
     //从子组件获取notebooks
     onNotebooks(data) {
       this.notebooks = data;
-
-      console.log(this.currentNote);
-      console.log(this.notebooks);
-      console.log(this.notebook);
     },
     //彻底删除
     deleate() {

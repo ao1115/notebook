@@ -1,70 +1,75 @@
 <template>
   <div>
-    <div class="nav">
-      <ul class="info">
-        <li class="add" @click="onCreate">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="新建"
-            placement="bottom"
-          >
-            <el-button>
-              <Icon name="add" />
-            </el-button>
-          </el-tooltip>
-        </li>
-        <li><Avatar /></li>
-        <li class="logout" @click="logout">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="退出登录"
-            placement="bottom"
-          >
-            <el-button>
-              <Icon name="logout" />
-            </el-button>
-          </el-tooltip>
+    <div>
+      <div class="nav">
+        <ul class="info">
+          <li class="add" @click="onCreate">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="新建"
+              placement="bottom"
+            >
+              <el-button>
+                <Icon name="add" />
+              </el-button>
+            </el-tooltip>
+          </li>
+          <li><Avatar /></li>
+          <li class="logout" @click="logout">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="退出登录"
+              placement="bottom"
+            >
+              <el-button>
+                <Icon name="logout" />
+              </el-button>
+            </el-tooltip>
+          </li>
+        </ul>
+      </div>
+      <div class="notebookList">
+        笔记本列表
+        <span class="count">{{ notebooks.length }}</span>
+      </div>
+      <div v-if="notebooks.length == 0" class="no-notebook">
+        <span><Icon name="notebook" /></span>
+        <span>暂无笔记本，新建一个吧</span>
+      </div>
+      <ul class="notebooks" v-show="notebooks.length != 0">
+        <li v-for="notebook in notebooks" :key="notebook.id" class="notebook">
+          <div class="title">
+            <Icon name="notebook" class="notebook-icon" />
+            <router-link :to="`/note?notebookId=${notebook.id}`">
+              <span class="notebook-title">{{ notebook.title }}</span>
+            </router-link>
+            <span class="noteCounts">{{ notebook.noteCounts }}</span>
+            <span @click.stop.prevent="onEdit(notebook)" class="onEdit">
+              <Icon name="pan" class="pan"
+            /></span>
+          </div>
+          <div class="createdAt">{{ notebook.createdAt }}</div>
+          <span @click.stop.prevent="onDelete(notebook)" class="remove">
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="删除"
+              placement="bottom"
+            >
+              <el-button>
+                <Icon name="remove" />
+              </el-button>
+            </el-tooltip>
+          </span>
         </li>
       </ul>
     </div>
-    <div class="notebookList">
-      笔记本列表
-      <span class="count">{{ notebooks.length }}</span>
-    </div>
-    <ul class="notebooks">
-      <li v-for="notebook in notebooks" :key="notebook.id" class="notebook">
-        <div class="title">
-          <Icon name="notebook" class="notebook-icon" />
-          <router-link :to="`/note?notebookId=${notebook.id}`">
-            <span class="notebook-title">{{ notebook.title }}</span>
-          </router-link>
-          <span class="noteCounts">{{ notebook.noteCounts }}</span>
-          <span @click.stop.prevent="onEdit(notebook)" class="onEdit">
-            <Icon name="pan" class="pan"
-          /></span>
-        </div>
-        <div class="createdAt">{{ notebook.createdAt }}</div>
-        <span @click.stop.prevent="onDelete(notebook)" class="remove">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="删除"
-            placement="bottom"
-          >
-            <el-button>
-              <Icon name="remove" />
-            </el-button>
-          </el-tooltip>
-        </span>
-      </li>
-    </ul>
   </div>
 </template>
 
 <script>
-window.NoteBooks = NoteBooks;
 import Auth from "@/apis/auth";
 import NoteBooks from "@/apis/notebooks";
 import Avatar from "@/components/Avatar.vue";
@@ -108,10 +113,10 @@ export default {
             message: res.msg,
           });
         })
-        .catch(() => {
+        .catch((res) => {
           this.$message({
             type: "info",
-            message: "创建失败",
+            message: res.msg,
           });
         });
     },
@@ -134,10 +139,10 @@ export default {
             });
           });
         })
-        .catch(() => {
+        .catch((res) => {
           this.$message({
             type: "info",
-            message: "网络异常",
+            message: res.msg,
           });
         });
     },
@@ -154,13 +159,13 @@ export default {
           this.notebooks.splice(this.notebooks.indexOf(notebook), 1);
           this.$message({
             type: "success",
-            message: "删除成功!",
+            message: res.msg,
           });
         })
-        .catch(() => {
+        .catch((res) => {
           this.$message({
             type: "info",
-            message: "已取消删除",
+            message: res.msg,
           });
         });
     },
@@ -201,7 +206,8 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 10px 8px;
+    margin-right: 8px;
+    margin-top: 24px;
     ::v-deep.el-button {
       border: none;
       padding: 0;
@@ -230,6 +236,19 @@ export default {
     font-weight: bolder;
   }
 }
+
+.no-notebook {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  color: #8ac3fc;
+  .icon {
+    width: 120px;
+    height: 120px;
+    margin: 120px 120px 10px 120px;
+  }
+}
+
 .notebooks {
   > li {
     display: flex;
