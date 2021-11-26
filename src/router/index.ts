@@ -9,27 +9,27 @@ Vue.use(VueRouter)
 const routes: Array<RouteConfig> = [
   {//默认路径，进来就自动跳转到login界面
     path: '/',
-    redirect: '/login'
+    redirect: '/notebooks'
   },
   {
     path: '/login',
     name: 'Login',
-    component: Login
+    component: () => import('@/views/Login.vue')
   },
   {
     path: '/notebooks',
     name: 'NoteBookList',
-    component: NoteBookList
+    component: () => import('@/views/NoteBookList.vue')
   },
   {
     path: '/note',
     name: 'NoteDetail.vue',
-    component: NoteDetail
+    component: () => import('@/views/NoteDetail.vue')
   },
   {
     path: '/trash',
     name: 'TashDetail',
-    component: TashDetail
+    component: () => import('@/views/TashDetail.vue')
   },
 
 ]
