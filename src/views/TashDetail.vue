@@ -56,8 +56,6 @@
 import Auth from "@/apis/auth";
 import Trash from "@/apis/trash";
 import TashSideBar from "@/views/TashSideBar.vue";
-import Bus from "@/helpers/bus";
-window.Trash = Trash;
 export default {
   components: { TashSideBar },
   data() {

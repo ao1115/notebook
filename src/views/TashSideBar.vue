@@ -6,15 +6,18 @@
           <span class="title-name">名称</span>
           <span class="update">删除时间</span>
         </li>
-        <li class="notes" v-for="trash in trashBooks" :key="trash.id">
+        <router-link
+          class="notes"
+          v-for="trash in trashBooks"
+          :key="trash.id"
+          :to="`/trash?noteId=${trash.id}`"
+        >
           <span class="names">
             <Icon name="notes" />
-            <router-link :to="`/trash?noteId=${trash.id}`">{{
-              trash.title
-            }}</router-link>
+            <span class="title">{{ trash.title }}</span>
           </span>
           <span>{{ trash.updatedAt }}</span>
-        </li>
+        </router-link>
       </ul>
     </div>
   </div>
@@ -22,9 +25,7 @@
 <script>
 import Auth from "@/apis/auth";
 import NoteBooks from "@/apis/notebooks";
-import Notes from "@/apis/notes";
 import Avatar from "@/components/Avatar.vue";
-import Bus from "@/helpers/bus";
 import Trash from "@/apis/trash";
 export default {
   component: { Avatar },
@@ -96,24 +97,38 @@ export default {
 .note-detail {
   display: flex;
   flex-direction: column;
-  > li {
+  margin-top: 19px;
+  > li,
+  > .notes {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: 24px;
-    margin-top: 18px;
     border-bottom: 1px solid #f5f5f5;
-    line-height: 10px;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding: 16px 8px;
+    padding-right: 28px;
+    font-size: 14px;
   }
-
+  .notes:hover {
+    background-color: #f5f5f5;
+  }
   .name {
+    margin-top: -9px;
     > :first-child {
       margin-left: 28px;
+      color: #409eff;
     }
     > :nth-child(2) {
       margin-right: 8px;
+      color: #409eff;
+    }
+  }
+  .names {
+    margin-left: 10px;
+    > .title {
+      margin-left: 4px;
+    }
+    > .icon {
+      color: #409eff;
     }
   }
 }

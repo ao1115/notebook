@@ -1,17 +1,31 @@
 <template>
   <div>
     <div class="nav">
-      <div class="search">
-        <input type="search" placeholder="搜索" />
-        <Icon name="search" />
-      </div>
       <ul class="info">
         <li class="add" @click="onCreate">
-          <Icon name="add" />
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="新建"
+            placement="bottom"
+          >
+            <el-button>
+              <Icon name="add" />
+            </el-button>
+          </el-tooltip>
         </li>
         <li><Avatar /></li>
         <li class="logout" @click="logout">
-          <Icon name="logout" />
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="退出登录"
+            placement="bottom"
+          >
+            <el-button>
+              <Icon name="logout" />
+            </el-button>
+          </el-tooltip>
         </li>
       </ul>
     </div>
@@ -27,14 +41,23 @@
             <span class="notebook-title">{{ notebook.title }}</span>
           </router-link>
           <span class="noteCounts">{{ notebook.noteCounts }}</span>
-          <span @click.stop.prevent="onEdit(notebook)" class="onEdit"
-            ><Icon name="pan" class="pan"
+          <span @click.stop.prevent="onEdit(notebook)" class="onEdit">
+            <Icon name="pan" class="pan"
           /></span>
         </div>
-        <div>{{ notebook.createdAt }}</div>
-        <span @click.stop.prevent="onDelete(notebook)" class="remove"
-          ><Icon name="remove"
-        /></span>
+        <div class="createdAt">{{ notebook.createdAt }}</div>
+        <span @click.stop.prevent="onDelete(notebook)" class="remove">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="删除"
+            placement="bottom"
+          >
+            <el-button>
+              <Icon name="remove" />
+            </el-button>
+          </el-tooltip>
+        </span>
       </li>
     </ul>
   </div>
@@ -152,7 +175,7 @@ export default {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding-left: 24px;
   padding-right: 24px;
   border-bottom: 1px solid #f5f5f5;
@@ -179,6 +202,12 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     padding: 10px 8px;
+    ::v-deep.el-button {
+      border: none;
+      padding: 0;
+      font-size: 4px;
+      background-color: transparent;
+    }
     .icon {
       width: 32px;
       height: 32px;
@@ -192,7 +221,7 @@ export default {
 .notebookList {
   height: 56px;
   line-height: 56px;
-  margin-left: 50px;
+  margin-left: 28px;
   color: #409eff;
   font-size: 18px;
   > .count {
@@ -207,10 +236,11 @@ export default {
     flex-direction: row;
     justify-content: space-between;
     border-bottom: 1px solid #f5f5f5;
-    padding: 8px;
-    margin-top: 4px;
+    padding: 16px 8px;
+    font-size: 14px;
     .notebook-icon {
       margin-left: 4px;
+      color: #409eff;
     }
     > .title {
       min-width: 450px;
@@ -224,6 +254,7 @@ export default {
       .pan {
         visibility: hidden;
         color: #c3c3c3;
+        cursor: pointer;
       }
     }
     .noteCounts {
@@ -232,14 +263,25 @@ export default {
       color: #c3c3c3;
       font-weight: bolder;
     }
+    .createdAt {
+      color: #595959;
+    }
   }
   > li:hover {
+    background-color: #f5f5f5;
     .pan {
       visibility: visible;
+      color: #409eff;
     }
   }
   .remove {
     margin-right: 36px;
+    ::v-deep.el-button {
+      border: none;
+      padding: 0;
+      font-size: 4px;
+      background-color: transparent;
+    }
     .icon {
       width: 24px;
       height: 20px;

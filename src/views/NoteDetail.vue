@@ -23,13 +23,40 @@
           </ul>
           <ul class="navbar">
             <li @click="isShowPreview = !isShowPreview">
-              <Icon name="markdown" class="markdown" />
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="Markdown查看"
+                placement="bottom"
+              >
+                <el-button>
+                  <Icon name="markdown" class="markdown" />
+                </el-button>
+              </el-tooltip>
             </li>
             <li @click="deleteNote">
-              <Icon name="remove" class="remove" />
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="删除"
+                placement="bottom"
+              >
+                <el-button>
+                  <Icon name="remove" class="remove" />
+                </el-button>
+              </el-tooltip>
             </li>
             <li @click="onSave">
-              <Icon name="save" class="save" />
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="保存"
+                placement="bottom"
+              >
+                <el-button>
+                  <Icon name="save" class="save" />
+                </el-button>
+              </el-tooltip>
             </li>
           </ul>
         </div>
@@ -68,7 +95,6 @@ import NoteSideBar from "./NoteSideBar.vue";
 import Bus from "@/helpers/bus";
 import MarkdownIt from "markdown-it";
 const md = new MarkdownIt();
-window.Notes = Notes;
 export default {
   components: { Avatar, NoteSideBar },
   data() {
@@ -212,6 +238,13 @@ export default {
         width: 24px;
         margin-right: 12px;
         color: rgb(38, 112, 248);
+      }
+      > li {
+        ::v-deep.el-button {
+          border: none;
+          padding: 0;
+          background-color: transparent;
+        }
       }
     }
   }

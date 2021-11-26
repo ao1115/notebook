@@ -18,7 +18,16 @@
           </el-dropdown-menu>
         </el-dropdown>
         <div class="add" @click="addNote">
-          <Icon name="add" />
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="新建笔记"
+            placement="bottom"
+          >
+            <el-button>
+              <Icon name="add" />
+            </el-button>
+          </el-tooltip>
         </div>
       </div>
 
@@ -32,6 +41,7 @@
             <Icon name="notes" />
             <router-link
               :to="`/note?noteId=${note.id}&notebookId=${currentBook.id}`"
+              class="title"
             >
               {{ note.title }}</router-link
             >
@@ -48,7 +58,6 @@ import NoteBooks from "@/apis/notebooks";
 import Notes from "@/apis/notes";
 import Avatar from "@/components/Avatar.vue";
 import Bus from "@/helpers/bus";
-window.Notes = Notes;
 export default {
   components: { Avatar },
   created() {
@@ -136,14 +145,11 @@ export default {
 <style lang="scss" scoped>
 .note-side-bar {
   height: calc(100vh - 60px);
-
   min-width: 960px;
 }
 .notebooks {
-  height: 32px;
   margin-top: 24px;
   border-bottom: 1px solid #f5f5f5;
-  line-height: 12px;
   padding-left: 12px;
   padding-right: 12px;
   display: flex;
@@ -160,8 +166,13 @@ export default {
     font-size: 12px;
   }
   .add {
-    margin-right: 26px;
-    > .icon {
+    margin-right: 34px;
+    ::v-deep.el-button {
+      border: none;
+      padding: 0;
+      background-color: transparent;
+    }
+    & .icon {
       width: 32px;
       height: 32px;
       color: #409eff;
@@ -176,20 +187,30 @@ export default {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    height: 24px;
-    margin-top: 18px;
     border-bottom: 1px solid #f5f5f5;
-    line-height: 10px;
-    padding-left: 12px;
-    padding-right: 12px;
+    padding: 16px 8px;
+    padding-right: 28px;
+    font-size: 14px;
   }
-
+  > li:hover {
+    background-color: #f5f5f5;
+  }
   .name {
     > :first-child {
       margin-left: 28px;
     }
     > :nth-child(2) {
       margin-right: 8px;
+    }
+  }
+
+  .names {
+    margin-left: 10px;
+    > .title {
+      margin-left: 4px;
+    }
+    > .icon {
+      color: #409eff;
     }
   }
 }

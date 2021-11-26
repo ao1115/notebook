@@ -12,25 +12,27 @@
           class="item"
           active-class="selected"
         >
-          <Icon name="gongzuotai" />笔记本</router-link
-        >
+          <Icon name="gongzuotai" />
+          <span>笔记本</span>
+        </router-link>
         <router-link
           to="/note"
-          title="小计"
+          title="记一笔"
           class="item"
           active-class="selected"
         >
           <Icon name="notes" />
-          记一笔</router-link
-        >
+          <span>记一笔</span>
+        </router-link>
         <router-link
           to="/trash"
           title="回收站"
           class="item"
           active-class="selected"
         >
-          <Icon name="remove" />回收站</router-link
-        >
+          <Icon name="remove" />
+          <span>回收站</span>
+        </router-link>
       </div>
     </div>
     <router-view class="notebooks" />
@@ -81,6 +83,7 @@
       }
       > svg {
         margin-right: 8px;
+        color: #409eff;
       }
     }
   }

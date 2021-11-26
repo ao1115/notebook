@@ -31,7 +31,6 @@ const routes: Array<RouteConfig> = [
     name: 'TashDetail',
     component: () => import('@/views/TashDetail.vue')
   },
-
 ]
 
 const router = new VueRouter({
