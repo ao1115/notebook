@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <div id="nav"></div>
-    <Nav />
     <SideBar />
   </div>
 </template>
 
 <style lang="scss">
+@import "~@/assets/style/reset.scss";
+@import "~@/assets/style/helper.scss";
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
