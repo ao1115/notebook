@@ -3,7 +3,12 @@ const path = require('path')
 module.exports = {
   lintOnSave: false,
   chainWebpack: config => {
-    const dir = path.resolve(__dirname, 'src/assets/icons')
+    const dir = path.resolve(__dirname, 'src/assets/icons');
+
+    publicPath: process.env.NODE_ENV === 'production'
+      ? '/notebook-website/'  //改成自己的仓库名   money-2-webset
+      : '/'
+
 
     config.module
       .rule('svg-sprite')
