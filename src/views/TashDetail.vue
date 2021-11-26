@@ -2,8 +2,9 @@
   <div>
     <div class="note-detail">
       <TashSideBar
-        @update:trashBooks="(value) => (trashBooks = value)"
+        @update:trashBooks="onTrashBooks"
         v-show="!currentNote.id"
+        @update:notebooks="onNotebooks"
       />
       <div class="edit-content" v-show="currentNote.id">
         <h3 class="note-title">{{ currentNote.title }}</h3>
@@ -11,38 +12,40 @@
           <ul class="crr">
             <li>{{ username }}</li>
             <li>|</li>
-            <li>笔记本标题</li>
+            <li>{{ notebook.title }}</li>
             <li>|</li>
             <li>{{ currentNote.updatedAt }}</li>
-            <li>|</li>
-            <li>{{ statusText }}</li>
           </ul>
           <ul class="navbar">
             <li @click="deleate">
-              <Icon name="remove" class="remove" />
-              彻底删除
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="彻底删除"
+                placement="bottom"
+              >
+                <el-button>
+                  <Icon name="remove" class="remove" />
+                </el-button>
+              </el-tooltip>
             </li>
             <li @click="resave">
-              <Icon name="save" class="save" />
-              恢复
+              <el-tooltip
+                class="item"
+                effect="dark"
+                content="恢复"
+                placement="bottom"
+              >
+                <el-button>
+                  <Icon name="save" class="save" />
+                </el-button>
+              </el-tooltip>
             </li>
           </ul>
         </div>
         <div class="edit">
-          <div>
-            <input
-              type="text"
-              placeholder="请输入标题"
-              @keydown="statusText = '正在输入…'"
-            />
-          </div>
-          <div>
-            <textarea
-              placeholder="请输入内容,支持Markdown语法…"
-              @keydown="statusText = '正在输入…'"
-              v-show="!isShowPreview"
-            ></textarea>
-          </div>
+          {{ currentNote.content }}
+          <div></div>
         </div>
       </div>
     </div>
@@ -60,11 +63,9 @@ export default {
   data() {
     return {
       notebooks: [],
-      notes: [],
+      notebook: {},
       currentNote: {},
       username: "",
-      statusText: "未更新",
-      isShowPreview: false,
       isShowEdit: false,
     };
   },
@@ -77,22 +78,33 @@ export default {
     Auth.getInfo().then((res) => {
       this.username = res.data.username;
     });
-    Bus.$on("update:trashBooks", (value) => {
-      console.log(value);
-      this.currentNote = value.find(
-        (trash) => trash.id === this.$route.query.noteId
-      );
-      console.log(this.currentNote);
-    });
   },
   beforeRouteUpdate(to, from, next) {
-    console.log(to.query.noteId, from);
     this.currentNote =
       this.trashBooks.find((trash) => trash.id == to.query.noteId) || {};
     next();
-    console.log(this.currentNote.id);
+    console.log(this.currentNote);
+    this.notebook =
+      this.notebooks.find((note) => note.id == this.currentNote.notebookId) ||
+      {};
   },
   methods: {
+    //从子组件获取trashBooks
+    onTrashBooks(value) {
+      this.trashBooks = value;
+      this.currentNote = this.trashBooks.find(
+        (trash) => trash.id == this.$route.query.noteId
+      );
+    },
+    //从子组件获取notebooks
+    onNotebooks(data) {
+      this.notebooks = data;
+
+      console.log(this.currentNote);
+      console.log(this.notebooks);
+      console.log(this.notebook);
+    },
+    //彻底删除
     deleate() {
       Trash.deleteNote({ noteId: this.currentNote.id })
         .then((res) => {
@@ -110,10 +122,11 @@ export default {
           });
         });
     },
+    //恢复
     resave() {
       Trash.revertNote({ noteId: this.currentNote.id })
         .then((res) => {
-          this.$router.replace({ path: "/note" });
+          this.$router.replace({ path: "/trash" });
           this.$message({
             type: "success",
             message: res.msg,
@@ -170,33 +183,31 @@ export default {
       }
     }
     .navbar {
+      margin-right: 12px;
       .icon {
         height: 24px;
-        width: 24px;
-        margin-right: 12px;
+        width: 36px;
         color: rgb(38, 112, 248);
+        padding: 0px 6px;
+      }
+      > li {
+        ::v-deep.el-button {
+          border: none;
+          padding: 0;
+          font-size: 4px;
+        }
       }
     }
   }
   .edit {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    display: block;
     margin-left: 24px;
-
-    & input {
-      border-bottom: 1px solid #f5f5f5;
-      width: 960px;
-      height: 48px;
-    }
-    & textarea {
-      margin-top: 24px;
-      width: 960px;
-      height: calc(100vh - 60px);
-      overflow: hidden;
-      font-size: 14px;
-    }
+    border-top: 1px solid #f5f5f5;
+    margin-top: 12px;
+    width: 960px;
+    height: calc(100vh - 60px);
+    overflow: hidden;
+    font-size: 14px;
+    padding-top: 12px;
   }
 }
 

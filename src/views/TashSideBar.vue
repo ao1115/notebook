@@ -4,7 +4,6 @@
       <ul class="note-detail">
         <li class="name">
           <span class="title-name">名称</span>
-          <span class="">归属</span>
           <span class="update">删除时间</span>
         </li>
         <li class="notes" v-for="trash in trashBooks" :key="trash.id">
@@ -14,7 +13,6 @@
               trash.title
             }}</router-link>
           </span>
-          <span>{{ trash.notebookId }}</span>
           <span>{{ trash.updatedAt }}</span>
         </li>
       </ul>
@@ -49,16 +47,11 @@ export default {
     NoteBooks.getAll().then((res) => {
       this.notebooks = res.data;
       this.belongTo = this.notebooks.map((notebook) => notebook.id);
-      console.log(this.belongTo);
+      this.$emit("update:notebooks", this.notebooks);
     });
     Trash.getAll().then((res) => {
       this.trashBooks = res.data;
       this.$emit("update:trashBooks", this.trashBooks);
-      Bus.$emit("update:trashBooks", this.trashBooks);
-      //   this.currentBook = this.trashBooks.find(
-      //     (trash) => trash.id == this.$route.query.noteId
-      //   );
-      //   console.log(this.currentBook.notebookId);
     });
   },
   methods: {},
